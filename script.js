@@ -16,13 +16,17 @@ const formReadyCb = () => {
     "provincia_texto_cmcmax-3622feb9-8618-41eb-986c-c1dbb43280a7"
   );
   elToHid.classList.toggle("hidden-field");
+
   let pcInput = document.createElement("input");
   pcInput.type = "text";
   pcInput.id = "zip-code";
+  pcInput.placeholder = "Código Postal";
   elToHid.parentNode.insertBefore(pcInput, elToHid.nextSibling);
 
   let provinciaEL = document.createElement("input");
   provinciaEL.type = "text";
+  provinciaEL.placeholder = "Provicia";
+  provinciaEL.disabled = true;
   pcInput.parentNode.insertBefore(provinciaEL, pcInput.nextSibling);
 
   let provinceOpt = document.createElement("select");
@@ -30,7 +34,6 @@ const formReadyCb = () => {
   provinceOpt.options.add(new Option("Seleccione Poblacion", "default"));
   provinceOpt.addEventListener("change", (e) => {
     elToHid.value = e.target.value;
-    console.log(elToHid.value);
   });
 
   pcInput.parentNode.insertBefore(provinceOpt, pcInput.nextSibling);
@@ -48,6 +51,5 @@ const formReadyCb = () => {
         provinceOpt.options.add(new Option(result, result));
       });
     });
-    console.log(pc);
   });
 };
