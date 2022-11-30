@@ -1,0 +1,5 @@
+.hidden-field {
+  visibility: hidden;
+  height: 0;
+  display: block;
+}
