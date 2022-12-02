@@ -52,4 +52,19 @@ const formReadyCb = () => {
       });
     });
   });
+  createAutocomplete();
 };
+
+function initMap() {
+  console.log("lib loaded");
+}
+
+function createAutocomplete() {
+  let autoCompleteInput = document.getElementById(
+    "address-3622feb9-8618-41eb-986c-c1dbb43280a7"
+  );
+  autoCompleteInput.style.width = "40%";
+  let autocomplete = new google.maps.places.Autocomplete(autoCompleteInput, {
+    types: ["geocode"],
+  });
+}
