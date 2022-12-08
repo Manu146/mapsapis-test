@@ -25,9 +25,8 @@ const formReadyCb = () => {
 
   let provinciaEL = document.createElement("input");
   provinciaEL.type = "text";
-  provinciaEL.placeholder = "Provicia";
+  provinciaEL.placeholder = "Comunidad A.";
   provinciaEL.disabled = true;
-  pcInput.parentNode.insertBefore(provinciaEL, pcInput.nextSibling);
 
   let provinceOpt = document.createElement("select");
   provinceOpt.id = "poblacion_select";
@@ -36,7 +35,15 @@ const formReadyCb = () => {
     elToHid.value = e.target.value;
   });
 
+  let prov2 = document.createElement("input");
+  prov2.type = "text";
+  prov2.placeholder = "Provincia";
+  prov2.disabled = true;
+
+  pcInput.parentNode.insertBefore(provinciaEL, pcInput.nextSibling);
+  pcInput.parentNode.insertBefore(prov2, pcInput.nextSibling);
   pcInput.parentNode.insertBefore(provinceOpt, pcInput.nextSibling);
+
   pcInput.addEventListener("input", (e) => {
     let pc = e.target.value;
     if (!pc || pc.length !== 5) return;
@@ -45,13 +52,20 @@ const formReadyCb = () => {
       let provincia = results.address_components.find((el) => {
         return el.types[0] === "administrative_area_level_1";
       });
-      provinciaEL.value = provincia.long_name;
+
+      let provincia2 = results.address_components.find((el) => {
+        return el.types[0] === "administrative_area_level_2";
+      });
+
+      prov2.value = provincia2.long_name || "No especificado";
+      provinciaEL.value = provincia.long_name || "No especificado";
 
       results.postcode_localities.forEach((result) => {
         provinceOpt.options.add(new Option(result, result));
       });
     });
   });
+
   createAutocomplete();
 };
 
