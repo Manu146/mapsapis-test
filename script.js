@@ -60,6 +60,14 @@ const formReadyCb = () => {
       prov2.value = provincia2.long_name || "No especificado";
       provinciaEL.value = provincia.long_name || "No especificado";
 
+      let options = document.querySelectorAll("#poblacion_select option");
+      if (options.length > 1) {
+        options.forEach((opt, i) => {
+          if (i === 0) return;
+          opt.remove();
+        });
+      }
+
       results.postcode_localities.forEach((result) => {
         provinceOpt.options.add(new Option(result, result));
       });
