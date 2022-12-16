@@ -8,61 +8,6 @@
     <title>Document</title>
   </head>
   <body>
-    <style>
-      body {
-        margin: 0;
-        background: #f4f8fa;
-      }
-      .container {
-        display: none;
-        width: 800px;
-        margin: 0 auto;
-        margin-top: 30px;
-      }
-      .skip-to-form {
-        left: -9999px;
-        position: absolute;
-      }
-      @media only screen and (max-width: 800px) {
-        .container {
-          width: 100%;
-        }
-      }
-      .container.error,
-      .container.loaded {
-        display: block;
-      }
-      .container.loaded {
-        background: #fff;
-        box-shadow: 0 4px 8px 0 rgba(53, 105, 128, 0.3),
-          0 6px 20px 0 rgba(165, 200, 213, 0.41);
-      }
-      #form-target {
-        padding: 40px;
-      }
-      .hs-form_free.hs-form__thankyou-message {
-        font-size: 38px;
-        text-align: center;
-      }
-      .hs-form_free.hs-form__thankyou-message .hs-form__virality__link {
-        font-size: 18px;
-        margin-top: 240px;
-        line-height: 60px;
-      }
-      .hs-form_free.hs-form__thankyou-message
-        .hs-form__virality__link__sproket {
-        width: 60px;
-        height: 60px;
-      }
-      .hs-form_free.hs-form__thankyou-message:before {
-        display: block;
-        content: url(https://js.hsformsqa.net/success-green.svg);
-        width: 130px;
-        height: 201px;
-        padding-top: 28px;
-        margin: 0 auto;
-      }
-    </style>
     <script src="./script.js"></script>
     <script
       async
@@ -79,7 +24,7 @@
         portalId: "25520614",
         formId: "3622feb9-8618-41eb-986c-c1dbb43280a7",
         onFormReady: formReadyCb,
-        onFormSubmit: (e) => console.log(e),
+        //onFormSubmit: (e) => console.log(e),
       });
     </script>
   </body>
