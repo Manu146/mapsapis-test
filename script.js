@@ -44,7 +44,7 @@ const formReadyCb = () => {
   pcInput.parentNode.insertBefore(prov2, pcInput.nextSibling);
   pcInput.parentNode.insertBefore(provinceOpt, pcInput.nextSibling);
 
-  pcInput.addEventListener("input", (e) => {
+  /*pcInput.addEventListener("input", (e) => {
     let pc = e.target.value;
     if (!pc || pc.length !== 5) return;
     fetchGData(pc).then((results) => {
@@ -72,9 +72,9 @@ const formReadyCb = () => {
         provinceOpt.options.add(new Option(result, result));
       });
     });
-  });
+  });*/
 
-  createAutocomplete();
+  //createAutocomplete();
 };
 
 function initMap() {
@@ -82,11 +82,75 @@ function initMap() {
 }
 
 function createAutocomplete() {
-  let autoCompleteInput = document.getElementById(
-    "address-3622feb9-8618-41eb-986c-c1dbb43280a7"
-  );
+  let autoCompleteInput = document.getElementsByName("address")[0];
   autoCompleteInput.style.width = "40%";
   let autocomplete = new google.maps.places.Autocomplete(autoCompleteInput, {
     types: ["geocode"],
   });
 }
+
+const hideEl = (elName) => {
+  if (typeof elName !== "string") return;
+  let elToHid = document.getElementsByClassName(`hs-${elName}`);
+  elToHid[0].classList.toggle("hidden-field");
+};
+
+const formCb = () => {
+  hideEl("provincia");
+  hideEl("comunidad_autonoma");
+  initializeZipCodeInput();
+  createAutocomplete();
+};
+
+const initializeZipCodeInput = () => {
+  let zipEl = document.getElementsByName("zip")[0];
+  let hsLocalidadEl = document.getElementsByName("localidad")[0];
+  let localidadSelect = document.createElement("select");
+
+  localidadSelect.id = "localidad_select";
+
+  //Ocultar campo localidad origial
+  hsLocalidadEl.classList.toggle("hidden-field");
+  //Agregar select localidades
+  hsLocalidadEl.parentNode.insertBefore(
+    localidadSelect,
+    hsLocalidadEl.nextSibling
+  );
+
+  localidadSelect.id = "localidad_select";
+  localidadSelect.options.add(new Option("Seleccione Poblacion", "default"));
+  localidadSelect.addEventListener("change", (e) => {
+    hsLocalidadEl.value = e.target.value;
+  });
+
+  zipEl.addEventListener("input", (e) => {
+    let pc = e.target.value;
+    if (!pc || pc.length !== 5) return;
+    fetchGData(pc).then((results) => {
+      console.log(results.address_components);
+      /*let provincia = results.address_components.find((el) => {
+        return el.types[0] === "administrative_area_level_1";
+      });
+
+      let provincia2 = results.address_components.find((el) => {
+        return el.types[0] === "administrative_area_level_2";
+      });
+
+      prov2.value = provincia2.long_name || "No especificado";
+      provinciaEL.value = provincia.long_name || "No especificado";
+      */
+      let options = document.querySelectorAll("#localidad_select option");
+      if (options.length > 1) {
+        options.forEach((opt, i) => {
+          if (i === 0) return;
+          opt.remove();
+        });
+      }
+
+      results.postcode_localities &&
+        results.postcode_localities.forEach((result) => {
+          localidadSelect.options.add(new Option(result, result));
+        });
+    });
+  });
+};
