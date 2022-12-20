@@ -1,10 +1,9 @@
 const fetchGData = async (pc) => {
   try {
     let res = await fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?components=country:ES&address=${pc}&key=AIzaSyC6y34nA-ucLQ6RC9_9Xiiw7yF5Fv7wnJU`
+      `https://maps.googleapis.com/maps/api/geocode/json?components=country:ES&address=${pc}&language=es&key=AIzaSyC6y34nA-ucLQ6RC9_9Xiiw7yF5Fv7wnJU`
     );
     let data = await res.json();
-    //console.log(data.results[0].postcode_localities);
     return data.results[0];
   } catch (error) {
     console.log(error);
@@ -96,8 +95,8 @@ const hideEl = (elName) => {
 };
 
 const formCb = () => {
-  hideEl("provincia");
-  hideEl("comunidad_autonoma");
+  //hideEl("provincia_texto");
+  //hideEl("comunidad_autonoma");
   initializeZipCodeInput();
   createAutocomplete();
 };
@@ -125,20 +124,25 @@ const initializeZipCodeInput = () => {
 
   zipEl.addEventListener("input", (e) => {
     let pc = e.target.value;
+    let provEl = document.getElementsByName("provincia_texto")[0];
+    let comAutEl = document.getElementsByName("comunidad_autonoma")[0];
     if (!pc || pc.length !== 5) return;
     fetchGData(pc).then((results) => {
       console.log(results.address_components);
-      /*let provincia = results.address_components.find((el) => {
+
+      //Level 1 Comunidad Autonoma
+      //Level 2 Provincia
+      let comAutonoma = results.address_components.find((el) => {
         return el.types[0] === "administrative_area_level_1";
       });
 
-      let provincia2 = results.address_components.find((el) => {
+      let provincia = results.address_components.find((el) => {
         return el.types[0] === "administrative_area_level_2";
       });
 
-      prov2.value = provincia2.long_name || "No especificado";
-      provinciaEL.value = provincia.long_name || "No especificado";
-      */
+      comAutEl.value = comAutonoma.long_name || "No especificado";
+      provEl.value = provincia.long_name || "No especificado";
+
       let options = document.querySelectorAll("#localidad_select option");
       if (options.length > 1) {
         options.forEach((opt, i) => {
@@ -147,10 +151,18 @@ const initializeZipCodeInput = () => {
         });
       }
 
-      results.postcode_localities &&
+      if (results.postcode_localities) {
         results.postcode_localities.forEach((result) => {
           localidadSelect.options.add(new Option(result, result));
         });
+      } else {
+        let localidad = results.address_components.find((el) => {
+          return el.types[0] === "locality";
+        });
+        localidadSelect.options.add(
+          new Option(localidad.long_name, localidad.long_name)
+        );
+      }
     });
   });
 };
