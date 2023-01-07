@@ -38,34 +38,34 @@ function createAutocomplete() {
     let provEl = document.getElementsByName("provincia_texto")[0];
     let comAutEl = document.getElementsByName("comunidad_autonoma")[0];
 
-    if (!zipEl.value) {
-      let addressData = places.address_components;
+    let addressData = places.address_components;
 
-      let postalCod =
-        addressData.find((el) => el.types[0] === "postal_code").long_name || "";
-      let comAutonoma =
-        addressData.find((el) => {
-          return el.types[0] === "administrative_area_level_1";
-        }).long_name || "";
-      let provincia =
-        addressData.find((el) => {
-          return el.types[0] === "administrative_area_level_2";
-        }).long_name || "";
-      let localidad =
-        addressData.find((el) => {
-          return el.types[0] === "locality";
-        }).long_name || "";
+    console.log(addressData);
 
-      zipEl.value = postalCod;
-      localidadEl.value = localidad;
-      provEl.value = provincia;
-      comAutEl.value = comAutonoma;
+    let postalCod =
+      addressData.find((el) => el.types[0] === "postal_code")?.long_name || "";
+    let comAutonoma =
+      addressData.find((el) => {
+        return el.types[0] === "administrative_area_level_1";
+      })?.long_name || "";
+    let provincia =
+      addressData.find((el) => {
+        return el.types[0] === "administrative_area_level_2";
+      })?.long_name || "";
+    let localidad =
+      addressData.find((el) => {
+        return el.types[0] === "locality";
+      })?.long_name || "";
 
-      resetSelectOpts();
+    zipEl.value = postalCod;
+    localidadEl.value = localidad;
+    provEl.value = provincia;
+    comAutEl.value = comAutonoma;
 
-      selectEl.options.add(new Option(localidad, localidad));
-      selectEl.value = localidad;
-    }
+    resetSelectOpts();
+
+    selectEl.options.add(new Option(localidad, localidad));
+    selectEl.value = localidad;
   });
 }
 
@@ -76,8 +76,11 @@ const hideEl = (elName) => {
 };
 
 const formCb = () => {
-  //hideEl("provincia_texto");
-  //hideEl("comunidad_autonoma");
+  hideEl("provincia_texto");
+  hideEl("comunidad_autonoma");
+  hideEl("localidad");
+  hideEl("address");
+  addZipCodChkBx();
   initializeZipCodeInput();
   createAutocomplete();
 };
@@ -90,7 +93,7 @@ const initializeZipCodeInput = () => {
   localidadSelect.id = "localidad_select";
 
   //Ocultar campo localidad origial
-  hsLocalidadEl.classList.toggle("hidden-field");
+  //hsLocalidadEl.classList.toggle("hidden-field");
   //Agregar select localidades
   hsLocalidadEl.parentNode.insertBefore(
     localidadSelect,
@@ -148,3 +151,26 @@ const initializeZipCodeInput = () => {
     });
   });
 };
+
+function addZipCodChkBx() {
+  let addressContainer =
+    document.getElementsByName("address")[0].parentElement.parentElement;
+
+  let chkBoxContainer = document.createElement("div");
+  let chkBox = document.createElement("input");
+  let label = document.createElement("label");
+  label.innerText = "No conozco mi codigo postal";
+  chkBox.type = "checkbox";
+  chkBoxContainer.appendChild(chkBox);
+  chkBoxContainer.appendChild(label);
+
+  addressContainer.parentNode.insertBefore(
+    chkBoxContainer,
+    addressContainer.nextSibling
+  );
+
+  chkBox.addEventListener("change", () => {
+    hideEl("zip");
+    hideEl("address");
+  });
+}
