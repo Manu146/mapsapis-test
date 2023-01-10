@@ -95,10 +95,7 @@ const initializeZipCodeInput = () => {
   //Ocultar campo localidad origial
   //hsLocalidadEl.classList.toggle("hidden-field");
   //Agregar select localidades
-  hsLocalidadEl.parentNode.insertBefore(
-    localidadSelect,
-    hsLocalidadEl.nextSibling
-  );
+  zipEl.parentNode.insertBefore(localidadSelect, zipEl.lastChild);
 
   localidadSelect.id = "localidad_select";
   localidadSelect.options.add(new Option("Seleccione Poblacion", "default"));
