@@ -87,15 +87,29 @@ const formCb = () => {
 
 const initializeZipCodeInput = () => {
   let zipEl = document.getElementsByName("zip")[0];
+  let zipParentEl = zipEl.parentElement.parentElement;
   let hsLocalidadEl = document.getElementsByName("localidad")[0];
+
   let localidadSelect = document.createElement("select");
+  let selectContainer = document.createElement("div");
+  let selectLabel = document.createElement("label");
 
+  selectLabel.innerText = "Poblacion";
+
+  selectContainer.appendChild(selectLabel);
+  selectContainer.appendChild(localidadSelect);
+
+  selectContainer.classList.add("hs-form-field");
+  selectContainer.classList.add("hs-poblacion-select");
   localidadSelect.id = "localidad_select";
+  localidadSelect.classList.add("hs-input");
 
+  selectContainer.id = "localidad-container";
   //Ocultar campo localidad origial
   //hsLocalidadEl.classList.toggle("hidden-field");
   //Agregar select localidades
-  zipEl.parentNode.insertBefore(localidadSelect, zipEl.lastChild);
+
+  zipParentEl.parentNode.insertBefore(selectContainer, zipParentEl.nextSibling);
 
   localidadSelect.id = "localidad_select";
   localidadSelect.options.add(new Option("Seleccione Poblacion", "default"));
@@ -150,24 +164,24 @@ const initializeZipCodeInput = () => {
 };
 
 function addZipCodChkBx() {
-  let addressContainer =
-    document.getElementsByName("address")[0].parentElement.parentElement;
+  let zipContainer =
+    document.getElementsByName("zip")[0].parentElement.parentElement;
 
   let chkBoxContainer = document.createElement("div");
   let chkBox = document.createElement("input");
   let label = document.createElement("label");
   label.innerText = "No conozco mi codigo postal";
   chkBox.type = "checkbox";
+  chkBoxContainer.classList.add("hs-form-field");
+  chkBoxContainer.classList.add("chkbox-container");
   chkBoxContainer.appendChild(chkBox);
   chkBoxContainer.appendChild(label);
 
-  addressContainer.parentNode.insertBefore(
-    chkBoxContainer,
-    addressContainer.nextSibling
-  );
+  zipContainer.parentNode.insertBefore(chkBoxContainer, zipContainer);
 
   chkBox.addEventListener("change", () => {
     hideEl("zip");
+    hideEl("poblacion-select");
     hideEl("address");
   });
 }
